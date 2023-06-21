@@ -9,9 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {
-      // define association here
-    }
+    
   }
   User.init({
     username: DataTypes.STRING,
@@ -19,7 +17,9 @@ module.exports = (sequelize, DataTypes) => {
     phoneNumber: DataTypes.STRING,
     password: DataTypes.STRING,
     imgProfile: DataTypes.STRING,
-    isVerify: DataTypes.BOOLEAN
+    isVerify: DataTypes.BOOLEAN,
+    verifyToken: DataTypes.STRING,
+    verifyTokenCreatedAt: DataTypes.DATE,
   }, {
     sequelize,
     modelName: 'User',

@@ -6,6 +6,11 @@ router.post(
   authController.register
 );
 
+router.post(
+  "/login",
+  authController.login
+);
+
 router.patch(
   '/verify', 
   authController.verify

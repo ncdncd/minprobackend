@@ -66,6 +66,7 @@ module.exports = {
             });
         }
     },
+
     async verify(req, res) {
       const token = req.query.token;
       try {
@@ -84,25 +85,15 @@ module.exports = {
             message: "user already verified",
           });
         }
-        // check if verifytoken expired or not.
-        const createdAt = new Date(userData.verifyTokenCreatedAt);
-        const now = new Date();
-        // set createdat to next 1 hour
-        createdAt.setHours(createdAt.getHours() + 1);
-        if (now > createdAt) {
-          return res.status(400).send({
-            message: "verify token is already expired",
-          });
-        }
   
-        // save to db
+
         userData.isVerify = true;
         userData.verifyToken = null;
         userData.verifyTokenCreatedAt = null;
         await userData.save();
   
         res.send({
-          message: "verification process is success",
+          message: "verification process successful",
         });
       } catch (errors) {
         console.error(errors);
@@ -112,6 +103,7 @@ module.exports = {
         });
       }
     },
+
     async login(req, res) {
       const { user_identification, password } = req.body;
       try {
@@ -120,7 +112,7 @@ module.exports = {
             [db.Sequelize.Op.or]: [
               { email: user_identification },
               { phoneNumber: user_identification },
-              { username: user_identification },
+              { username: user_identification},
             ],
           },
         });
@@ -129,30 +121,16 @@ module.exports = {
             message: "login failed, incorrect identity/password",
           });
         }
-        if (user.isSuspended) {
-          return res.status(400).send({
-            message: "login failed, account suspended",
-          });
-        }
-  
-        // check password match with hash
+
         const isValid = await bcrypt.compare(password, user.password);
         if (!isValid) {
-          user.loginTrialCount++;
-          if (user.loginTrialCount >= 3) {
-            user.isSuspended = true;
-          }
-          await user.save();
           return res.status(400).send({
             message: "login failed, incorrect identity/password",
           });
         }
-  
-        // reset counter login
-        user.loginTrialCount = 0;
-        await user.save();
-        // generate token authorization
-        const payload = { id: user.id, isAdmin: user.isAdmin };
+
+
+        const payload = { id: user.id };
         const token = jwt.sign(payload, secretKey, {
           expiresIn: "1h",
         });

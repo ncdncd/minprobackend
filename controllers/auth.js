@@ -11,7 +11,7 @@ const secretKey = process.env.JWT_SECRET_KEY;
 
 module.exports = {
     async register(req, res){
-        const { username, email, phoneNumber, password, confirmPassword } =
+        const { username, email, phoneNumber, password } =
         req.body;
         try {
             const isExist = await User.findOne({

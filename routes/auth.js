@@ -4,6 +4,7 @@ const router = require("express").Router();
 
 router.post(
   "/register",
+  authValidator.validateRegister,
   authController.register
 );
 

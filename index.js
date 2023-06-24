@@ -11,6 +11,7 @@ app.use(express.json());
 
 app.use("/api/auth", routes.auth);
 app.use("/api/blog", routes.blog);
+app.use("/api/profile", routes.profile);
 
 db.sequelize
   .authenticate()

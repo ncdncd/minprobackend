@@ -1,4 +1,5 @@
 const { auth: authController } = require("../controllers");
+const authValidator = require("../middleware/validation/auth");
 const router = require("express").Router();
 
 router.post(
@@ -16,6 +17,16 @@ router.patch(
   authController.verify
 );
 
+router.post(
+  '/forgotPass', 
+  authController.forgot
+);
+
+router.post(
+  '/resetPass', 
+  authValidator.validateResetPass,
+  authController.reset
+);
 
 router.get("/");
 

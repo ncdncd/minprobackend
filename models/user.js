@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      // define association herew
       User.hasMany(models.Blog, { foreignKey: "authorId" });
     }
     
@@ -24,6 +24,8 @@ module.exports = (sequelize, DataTypes) => {
     isVerify: DataTypes.BOOLEAN,
     verifyToken: DataTypes.STRING,
     verifyTokenCreatedAt: DataTypes.DATE,
+    forgotToken: DataTypes.STRING,
+    forgotTokenCreatedAt: DataTypes.DATE,
   }, {
     sequelize,
     modelName: 'User',

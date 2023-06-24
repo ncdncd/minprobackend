@@ -10,6 +10,7 @@ const app = express();
 app.use(express.json());
 
 app.use("/api/auth", routes.auth);
+app.use("/api/blog", routes.blog);
 
 db.sequelize
   .authenticate()

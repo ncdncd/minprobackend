@@ -17,6 +17,26 @@ const validate = (validations) => {
 };
 
 module.exports = {
+
+  validateResetPass: validate([
+    body("token").notEmpty().withMessage("token is required"),
+    body("password")
+      .isLength({ min: 6 })
+      .withMessage("minimum password length is 6 characters")
+      .isStrongPassword({
+        minNumbers: 0,
+      })
+      .withMessage(
+        "password must contain atleast 1 uppercase letter and 1 symbol"
+      )
+      .custom((value, { req }) => {
+        if (value !== req.body.confirmPassword) {
+          return false;
+        }
+        return true;
+      })
+      .withMessage("confirm password is not match with password"),
+  ]),
   
   validateRegister: validate([
     body("username")

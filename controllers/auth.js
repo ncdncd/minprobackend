@@ -146,4 +146,89 @@ module.exports = {
         });
       }
     },
-}
+
+    async forgot(req, res) {
+      const { email } = req.body;
+  
+      try {
+        const userData = await db.User.findOne({ where: { email } });
+        if (!userData) {
+          return res.status(500).send({
+            message: "user is not found",
+          });
+        }
+  
+        // generate forgot token
+        const forgotToken = crypto.randomBytes(16).toString("hex");
+        const time = new Date();
+
+        // send email
+        await transporter.sendMail({
+          from: "the Blog",
+          to: email,
+          subject: "Reset Password",
+          html: `<p>Click on this link to reset your password
+          <a href='${process.env.BASEPATH}/forgot?token=${forgotToken}' 
+          target="_blank">reset password</a></p>`,
+        });
+  
+        // save token to db
+        userData.forgotToken = forgotToken;
+        userData.forgotTokenCreatedAt = time;
+        await userData.save();
+  
+        res.send({
+          message: "please check your email!",
+        });
+      } catch (errors) {
+        console.error(errors);
+        res.status(500).send({
+          message: "fatal error on server",
+          error: errors.message,
+        });
+      }
+    },
+  
+    async reset(req, res) {
+      const { token, password } = req.body;
+      try {
+        const userData = await db.User.findOne({
+          where: {
+            forgotToken: token,
+          },
+        });
+        if (!userData) {
+          return res.status(400).send({ message: "token is not valid" });
+        }
+  
+        // check token expiration
+        const tokenCA = new Date(userData.forgotTokenCreatedAt);
+        const now = new Date();
+        tokenCA.setHours(tokenCA.getHours() + 1);
+  
+        if (now > tokenCA) {
+          return res.status(400).send({
+            message: "token is already expired",
+          });
+        }
+  
+        // generate password
+        const salt = await bcrypt.genSalt(10);
+        const hashPassword = await bcrypt.hash(password, salt);
+  
+        userData.password = hashPassword;
+        userData.forgotToken = null;
+        userData.forgotTokenCreatedAt = null;
+        await userData.save();
+        res.send({
+          message: "password is reset, try to login now!",
+        });
+      } catch (errors) {
+        console.error(errors);
+        res.status(500).send({
+          message: "fatal error on server",
+          error: errors.message,
+        });
+      }
+    },
+};

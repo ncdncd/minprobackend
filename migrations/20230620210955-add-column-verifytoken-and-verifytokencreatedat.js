@@ -29,5 +29,9 @@ module.exports = {
      * Example:
      * await queryInterface.dropTable('users');
      */
+    await queryInterface.removeColumn("Users", "verifyToken", {
+    });
+    await queryInterface.removeColumn("Users", "verifyTokenCreatedAt", {
+    });
   }
 };

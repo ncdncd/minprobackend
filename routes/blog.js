@@ -28,6 +28,12 @@ router.get(
     blogController.getMostFavorite
 );
 
+router.patch(
+    '/remove/:id',
+    authMiddleware.verifyToken,
+    blogController.deleteBlogPost
+);
+
 router.get(
     '/:id',
     blogController.singlePageBlog
@@ -43,6 +49,13 @@ router.post(
     '/like/:id',
     authMiddleware.verifyToken,
     blogController.likeBlog
+);
+
+router.patch(
+    '/like/:id',
+    authMiddleware.verifyToken,
+    blogController.unlikeBlogPost
+    
 );
 
 

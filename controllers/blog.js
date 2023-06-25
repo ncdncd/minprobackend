@@ -229,6 +229,7 @@ module.exports = {
     }
   },
 
+
   async getLikedBlog(req, res) {
     const userId = req.user.id;
     try {
@@ -291,11 +292,11 @@ module.exports = {
         ],
         include:[{
             model: db.Blog,
-            attributes: ['id', 'title', 'imgBlog','contentBlog', 'category', 'country'],
+            attributes: ['id', 'title', 'category'],
             as:'Blog',
             include:[{
                 model: db.User,
-                attributes: ['username','imgProfile']
+                attributes: ['username']
             }]
             }],
         group:['blogId'],
@@ -313,6 +314,97 @@ module.exports = {
         errors: error.message,
       });
     }
-  }
+  },
+
+  async deleteBlogPost(req, res) {
+    const userId = req.user.id;
+    const deleteId = req.params.id;
+    try {
+
+        const isExist = await db.Blog.findOne({
+            where: { id: deleteId },
+          });
+          if (!isExist) {
+            return res.status(404).send({
+              message: "blog not found",
+            });
+          }
+
+        const blogAuthorId = await Blog.findOne({
+            where: {id: deleteId },
+        }) 
+
+        const blogUserId = blogAuthorId.dataValues.authorId
+
+        if(userId !== blogUserId){
+            return res.status(500).send({
+                message: "cannot delete post that is not yours",
+            })
+        }
+
+      const deleteBlog = await Blog.destroy({ 
+        where: {id: deleteId}
+        });
+
+      res.status(201).send({
+        message: "delete blog successful",
+      });
+    } catch (errors) {
+      res.status(500).send({
+        message: "fatal error on server",
+        errors,
+      });
+    }
+  },
+
+  async unlikeBlogPost(req, res) {
+    const userId = req.user.id;
+    const unlikeId = req.params.id;
+    try {
+
+        const isExist = await db.Blog.findOne({
+            where: { id: unlikeId },
+          });
+          if (!isExist) {
+            return res.status(404).send({
+              message: "blog not found",
+            });
+          }
+
+          const isLikeExist = await db.Like.findOne({
+            where: { blogId: unlikeId },
+          });
+          if (!isLikeExist) {
+            return res.status(404).send({
+              message: "blog have not been liked",
+            });
+          }
+
+        const blogAuthorId = await db.Like.findOne({
+            where: {blogId: unlikeId },
+        }) 
+
+        const blogUserId = blogAuthorId.dataValues.userId
+
+        if(userId !== blogUserId){
+            return res.status(500).send({
+                message: "cannot unlike that is not yours",
+            })
+        }
+
+      const deleteBlog = await db.Like.destroy({ 
+        where: {blogId: unlikeId}
+        });
+
+      res.status(201).send({
+        message: "blog unliked",
+      });
+    } catch (error) {
+      res.status(500).send({
+        message: "fatal error on server",
+        errors: error.message,
+      });
+    }
+  },
 
 }

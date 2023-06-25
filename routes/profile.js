@@ -1,7 +1,7 @@
 const profileController = require("../controllers/profile");
 const router = require("express").Router();
 const authMiddleware = require("../middleware/auth")
-const multerUpload = require("../middleware/multer");
+const multerUploadP = require("../middleware/multerProf");
 const validateMiddleware = require("../middleware/validation/auth")
 
 router.use(authMiddleware.verifyToken)
@@ -32,7 +32,7 @@ router.patch(
 
 router.patch(
     '/profilePhoto',
-    multerUpload.single("file"),
+    multerUploadP.single("file"),
     profileController.updateProfilePhoto
 );
   

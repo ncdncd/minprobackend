@@ -23,11 +23,29 @@ router.get(
     blogController.getMyBlog
 );
 
+router.get(
+    '/mostFav',
+    blogController.getMostFavorite
+);
+
+router.get(
+    '/:id',
+    blogController.singlePageBlog
+);
+
+router.get(
+    '/like',
+    authMiddleware.verifyToken,
+    blogController.getLikedBlog
+);
+
 router.post(
     '/like/:id',
     authMiddleware.verifyToken,
     blogController.likeBlog
 );
+
+
   
 router.get("/");
   

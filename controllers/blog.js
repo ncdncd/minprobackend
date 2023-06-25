@@ -5,8 +5,11 @@ const {
   getAbsolutePathPublicFile,
 } = require("../utils/file");
 const fs = require("fs");
+const { Sequelize } = require('sequelize');
+
 
 const { Blog } = db;
+
 
 module.exports = {
  
@@ -37,74 +40,150 @@ module.exports = {
         page: Number(req.query.page) || 1,
         perPage: Number(req.query.perPage) || 10,
         search: req.query.search || undefined,
+        sortBy: req.query.sort || "createdAt",
+        sortOrder: req.query.order || "desc",
+        category: req.query.category || undefined,
+        keywords: req.query.keywords || undefined,
+        title: req.query.title || undefined,
       };
-    try {
-        const where = { authorId };
-      if (pagination.search) {
-        where.contentBlog = {
-          [db.Sequelize.Op.like]: `%${pagination.search}%`,
-        };
-      }
-      const results = await db.Blog.findAll({
-        include: [
-          {
-            model: db.User,
-            attributes: ["username"],
+  
+      try {
+        let where = {};
+  
+        if (pagination.search) {
+          where[db.Sequelize.Op.or] = [
+            {
+              "$user.username$": {
+                [db.Sequelize.Op.like]: `%${pagination.search}%`,
+              },
+            },
+            { keywords: { [db.Sequelize.Op.like]: `%${pagination.search}%` } },
+            { title: { [db.Sequelize.Op.like]: `%${pagination.search}%` } },
+            { contentBlog: { [db.Sequelize.Op.like]: `%${pagination.search}%` } },
+          ];
+        }
+  
+        if (pagination.category) {
+          where.category = pagination.category;
+        }
+  
+        if (pagination.keywords) {
+          where.keywords = { [db.Sequelize.Op.like]: `%${pagination.keywords}%` };
+        }
+  
+        if (pagination.title) {
+          where.title = { [db.Sequelize.Op.like]: `%${pagination.title}%` };
+        }
+    const { count, rows } = await Blog.findAndCountAll({
+          where,
+          include: [{ model: db.User, attributes: ["username"], as: "User" }],
+          order: [[pagination.sortBy, pagination.sortOrder]],
+          limit: pagination.perPage,
+          offset: (pagination.page - 1) * pagination.perPage,
+        });
+  
+        if (pagination.search && count === 0) {
+          return res.status(404).send({
+            message: "No blogs found matching the search query.",
+          });
+        }
+  
+        const totalPages = Math.ceil(count / pagination.perPage);
+  
+        res.send({
+          message: "Successfully retrieved blogs.",
+          pagination: {
+            page: pagination.page,
+            perPage: pagination.perPage,
+            totalPages: totalPages,
+            totalData: count,
           },
-        ],
-      });
-      res.send({ message: "success get all blog post", data: results });
-    } catch (errors) {
-      res.status(500).send({
-        message: "fatal error on server",
-        errors,
-      });
-    }
-  },
+          data: rows,
+        });
+      } catch (error) {
+        console.error("Error:", error);
+        res.status(500).send({
+          message: "An error occurred while processing the request.",
+          error: error.message,
+        });
+      }
+    },
+
 
   async getMyBlog(req, res) {
     const authorId = req.user.id;
     const pagination = {
-      page: Number(req.query.page) || 1,
-      perPage: Number(req.query.perPage) || 10,
-      search: req.query.search || undefined,
-    //   sortBy: req.query.sortBy,
-    };
-    try {
-      const where = { authorId };
-      if (pagination.search) {
-        where.contentBlog = {
-          [db.Sequelize.Op.like]: `%${pagination.search}%`,
-        };
+        page: Number(req.query.page) || 1,
+        perPage: Number(req.query.perPage) || 10,
+        search: req.query.search || undefined,
+        sortBy: req.query.sort || "createdAt",
+        sortOrder: req.query.order || "desc",
+        category: req.query.category || undefined,
+        keywords: req.query.keywords || undefined,
+        title: req.query.title || undefined,
+      };
+  
+      try {
+        let where = { authorId };
+  
+        if (pagination.search) {
+          where[db.Sequelize.Op.or] = [
+            {
+              "$user.username$": {
+                [db.Sequelize.Op.like]: `%${pagination.search}%`,
+              },
+            },
+            { keywords: { [db.Sequelize.Op.like]: `%${pagination.search}%` } },
+            { title: { [db.Sequelize.Op.like]: `%${pagination.search}%` } },
+            { contentBlog: { [db.Sequelize.Op.like]: `%${pagination.search}%` } },
+          ];
+        }
+  
+        if (pagination.category) {
+          where.category = pagination.category;
+        }
+  
+        if (pagination.keywords) {
+          where.keywords = { [db.Sequelize.Op.like]: `%${pagination.keywords}%` };
+        }
+  
+        if (pagination.title) {
+          where.title = { [db.Sequelize.Op.like]: `%${pagination.title}%` };
+        }
+    const { count, rows } = await Blog.findAndCountAll({
+          where,
+          include: [{ model: db.User, attributes: ["username"], as: "User" }],
+          order: [[pagination.sortBy, pagination.sortOrder]],
+          limit: pagination.perPage,
+          offset: (pagination.page - 1) * pagination.perPage,
+        });
+  
+        if (pagination.search && count === 0) {
+          return res.status(404).send({
+            message: "No blogs found matching the search query.",
+          });
+        }
+  
+        const totalPages = Math.ceil(count / pagination.perPage);
+  
+        res.send({
+          message: "Successfully retrieved blogs.",
+          pagination: {
+            page: pagination.page,
+            perPage: pagination.perPage,
+            totalPages: totalPages,
+            totalData: count,
+          },
+          data: rows,
+        });
+      } catch (error) {
+        console.error("Error:", error);
+        res.status(500).send({
+          message: "An error occurred while processing the request.",
+          error: error.message,
+        });
       }
-    //   const order = []; // generate order/sorting
-    //   for (const sort in pagination.sortBy) {
-    //     order.push([sort, pagination.sortBy[sort]]);
-    //   }
-
-      console.log(order)
-
-      const results = await db.Blog.findAll({
-        where,
-        limit: pagination.perPage,
-        offset: (pagination.page - 1) * pagination.perPage,
-        // order,
-      });
-
-      const countData = await db.Blog.count({ where });
-      pagination.totalData = countData;
-      res.send({
-        message: "successfully got my blog",
-        pagination,
-        data: results,
-      });
-    } catch (errors) {
-      res.status(500).send({
-        message: "fatal error on server",
-        errors: errors.message,
-      });
-    }
-  },
+    },
 
   async likeBlog(req, res) {
 
@@ -150,10 +229,31 @@ module.exports = {
     }
   },
 
-  async likeBlog(req, res) {
+  async getLikedBlog(req, res) {
+    const userId = req.user.id;
+    try {
+      const blogData = await db.Like.findAll({
+        where: {
+          userId,
+        },
+        include: db.Blog,
+      });
 
-    const blogId = Number(req.params.id)
-    const userId = req.user.id
+      res.status(200).send({
+        message: "get liked blog successfull",
+        blogData,
+      });
+    } catch (error) {
+      res.status(500).send({
+        message: "fatal error",
+        errors: error.message,
+      });
+    }
+  },
+
+  async singlePageBlog(req, res) {
+
+    const blogId = req.params.id
     
     try {
 
@@ -166,25 +266,13 @@ module.exports = {
         });
       }
 
-      const isLiked = await db.Like.findOne({
-        where: { [db.Sequelize.Op.and]: [{ userId }, { blogId }] },
-      });
-      if (isLiked) {
-        return res.status(400).send({
-          message: "you've already liked this blog",
-        });
-      }
-
-      const newLike = await db.Like.create({ 
-
-        blogId,
-        userId,
-
+      const singlePage = await db.Blog.findOne({ 
+            where: { id: blogId },
         });
 
       res.status(201).send({
-        message: "blog liked",
-        data: newLike
+        message: "single page displayed",
+        data: singlePage
       });
     } catch (errors) {
       res.status(500).send({
@@ -193,4 +281,38 @@ module.exports = {
       });
     }
   },
+
+  async getMostFavorite(req, res) {
+    
+    try {
+        const mostLike = await db.Like.findAll({
+        attributes: ['blogId',
+        [Sequelize.fn('COUNT', Sequelize.col('blogId')), 'likeCount'],
+        ],
+        include:[{
+            model: db.Blog,
+            attributes: ['id', 'title', 'imgBlog','contentBlog', 'category', 'country'],
+            as:'Blog',
+            include:[{
+                model: db.User,
+                attributes: ['username','imgProfile']
+            }]
+            }],
+        group:['blogId'],
+        order:[[db.Sequelize.literal("likeCount"), "DESC"]],
+        limit: 10,
+      });
+
+      res.status(201).send({
+        message: "most favorite blog displayed",
+        data: mostLike
+      });
+    } catch (error) {
+      res.status(500).send({
+        message: "fatal error on server",
+        errors: error.message,
+      });
+    }
+  }
+
 }

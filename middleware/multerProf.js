@@ -11,14 +11,13 @@ const storage = multer.diskStorage({
   },
 });
 
-const fileFilter = (req, file, cb) => {
+const fileFilterP = (req, file, cb) => {
   const mimeType = file.mimetype;
   switch (mimeType) {
     case "image/jpeg":
     case "image/png":
-    case "image/webp":
     case "image/gif":
-      if (file.size > 10 * 1000 * 1000) {
+      if (file.size > 1 * 1000 * 1000) {
         cb(new Error("File size is too big"));
         return;
       }
@@ -29,4 +28,4 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-module.exports = multer({ storage, fileFilter });
+module.exports = multer({ storage, fileFilterP });

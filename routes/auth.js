@@ -1,10 +1,10 @@
 const { auth: authController } = require("../controllers");
-const authValidator = require("../middleware/validation/auth");
 const router = require("express").Router();
+const validateMiddleware = require("../middleware/validation/auth")
 
 router.post(
   "/register",
-  authValidator.validateRegister,
+  validateMiddleware.validateRegister,
   authController.register
 );
 
@@ -19,13 +19,14 @@ router.patch(
 );
 
 router.post(
-  '/forgotPass', 
+  '/forgotPass',
+  validateMiddleware.validateEmail,
   authController.forgot
 );
 
 router.post(
   '/resetPass', 
-  authValidator.validateResetPass,
+  validateMiddleware.validateResetPass,
   authController.reset
 );
 

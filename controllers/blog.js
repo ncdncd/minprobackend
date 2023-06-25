@@ -3,6 +3,7 @@ const {
   setFromFileNameToDBValue,
   getFilenameFromDbValue,
   getAbsolutePathPublicFile,
+  convertFromDBtoRealPath,
 } = require("../utils/file");
 const fs = require("fs");
 const { Sequelize } = require('sequelize');
@@ -329,21 +330,18 @@ module.exports = {
               message: "blog not found",
             });
           }
-
-        const blogAuthorId = await Blog.findOne({
-            where: {id: deleteId },
-        }) 
-
-        const blogUserId = blogAuthorId.dataValues.authorId
-
-        if(userId !== blogUserId){
-            return res.status(500).send({
-                message: "cannot delete post that is not yours",
-            })
-        }
+        
+          const isBlog = await db.Blog.findOne({
+            where: { authorId: userId, id: deleteId },
+          });
+          if (!isBlog) {
+            return res.status(404).send({
+              message: "unable to delete blog",
+            });
+          }
 
       const deleteBlog = await Blog.destroy({ 
-        where: {id: deleteId}
+        where: {id: deleteId, authorId: userId}
         });
 
       res.status(201).send({
@@ -372,7 +370,7 @@ module.exports = {
           }
 
           const isLikeExist = await db.Like.findOne({
-            where: { blogId: unlikeId },
+            where: { userId: userId, blogId: unlikeId },
           });
           if (!isLikeExist) {
             return res.status(404).send({
@@ -380,20 +378,8 @@ module.exports = {
             });
           }
 
-        const blogAuthorId = await db.Like.findOne({
-            where: {blogId: unlikeId },
-        }) 
-
-        const blogUserId = blogAuthorId.dataValues.userId
-
-        if(userId !== blogUserId){
-            return res.status(500).send({
-                message: "cannot unlike that is not yours",
-            })
-        }
-
       const deleteBlog = await db.Like.destroy({ 
-        where: {blogId: unlikeId}
+        where: { userId: userId, blogId: unlikeId}
         });
 
       res.status(201).send({

@@ -1,10 +1,11 @@
 const jwt = require("jsonwebtoken");
 const secretKey = process.env.JWT_SECRET_KEY;
+const db = require("../models");
 
 module.exports = {
-  // authentication
+
   async verifyToken(req, res, next) {
-    // check token valid or not
+
     const { authorization } = req.headers;
     if (!authorization) {
       res.status(401).send({
@@ -33,4 +34,19 @@ module.exports = {
       }
     }
   },
+
+  async checkIsVerify(req, res, next) {
+    
+    const verified = await db.User.findOne({
+        where: { id: req.user.id }
+    })
+
+    if (verified.dataValues.isVerify) {
+      return next();
+    }
+    res.status(401).send({
+      message: "your account is not verified",
+    });
+  },
+
 }

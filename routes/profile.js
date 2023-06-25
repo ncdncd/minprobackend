@@ -4,7 +4,8 @@ const authMiddleware = require("../middleware/auth")
 const multerUploadP = require("../middleware/multerProf");
 const validateMiddleware = require("../middleware/validation/auth")
 
-router.use(authMiddleware.verifyToken)
+router.use(authMiddleware.verifyToken);
+router.use(authMiddleware.checkIsVerify);
 
 router.patch(
     '/changePass',

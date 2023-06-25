@@ -8,6 +8,7 @@ const authMiddleware = require("../middleware/auth")
 router.post(
     '/',
     authMiddleware.verifyToken,
+    authMiddleware.checkIsVerify,
     multerUpload.single("file"),
     blogController.createBlogPost
 );
@@ -31,6 +32,7 @@ router.get(
 router.patch(
     '/remove/:id',
     authMiddleware.verifyToken,
+    authMiddleware.checkIsVerify,
     blogController.deleteBlogPost
 );
 
@@ -48,14 +50,16 @@ router.get(
 router.post(
     '/like/:id',
     authMiddleware.verifyToken,
+    authMiddleware.checkIsVerify,
     blogController.likeBlog
 );
 
 router.patch(
     '/like/:id',
     authMiddleware.verifyToken,
+    authMiddleware.checkIsVerify,
     blogController.unlikeBlogPost
-    
+
 );
 
 

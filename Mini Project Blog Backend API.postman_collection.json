@@ -1,0 +1,859 @@
+{
+	"info": {
+		"_postman_id": "3a0c0999-f289-4d41-ac6e-78a785a8a58b",
+		"name": "Mini Project Blog Backend API",
+		"description": "StartFragment\n\nBlogging website merupakan website yang digunakan untuk menampilkan blog/artikel. Dimana user dapat menjadi penulis atau sekedar membaca. Ini merupakan spesifikasi API lanjutan dari mini project untuk modul Front-end.\n\nEndFra",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "Register Acoount",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"arkasocky\",\r\n    \"email\":\"arka.socky@gmail.com\",\r\n    \"phoneNumber\":\"085632564513\",\r\n    \"password\":\"testing0000\",\r\n    \"confirmPassword\":\"testing0000\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify account",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRlbm94ZXQiLCJlbWFpbCI6ImRlbm94ZXQ1ODJAbGFybGFuZC5jb20iLCJwaG9uZSI6IjA4NTYzMjU2NDUxMyIsInBhc3N3b3JkIjoiJDJiJDEwJDcxSnZsQUh3M0FPdDMuelJJMWg4Mi52dThDc3ZBTU1INlBvVEo4NU41LjBuRDZBU1VPRnFHIiwiaWQiOjYsImlzVmVyaWZpZWQiOmZhbHNlLCJpYXQiOjE2ODM1NTE2ODEsImV4cCI6MTY4MzU1NTI4MX0.ggHSFHgryuXR5oELQUII8joIAdp3yhfVvIAqW2gBJFw",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8000/api/auth/verify?token=a1864afd4fd64653948a208027770cdd",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"auth",
+								"verify"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "a1864afd4fd64653948a208027770cdd"
+								}
+							]
+						},
+						"description": "Untuk menggunakan URL_API ini, siapkan page verification disisi front-end dengan routing [http://localhost:3000/verify/:token.](http://localhost:3000/verify/:token.) Lalu dipage tersebut sediakan button untuk menjalankan URL_API ini.\n\nJangan lupa gunakan TOKEN yang didapatkan setelah login untuk melakukan verify account.  \nGunakan token pada konfigurasi headers fetch API.\n\n``` javascript\nconst headers ={\n\"Authorizations\":Bearer ${TOKEN}\n}\n\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user_identification\": \"arkasocky\",\r\n    \"password\":\"testing0000\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Forgot Password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRlbm94ZXQ1ODJAbGFybGFuZC5jb20iLCJpZCI6NiwiaWF0IjoxNjgzNTU0MzE3fQ.zNQgtEwG60Uq4mlyMnnylkcbdikViY5rFRyENC8Uf10",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"arka.socky+6@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/auth/forgotPass",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"auth",
+								"forgotPass"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reset Password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7ImVtYWlsIjoiZGVub3hldDU4MkBsYXJsYW5kLmNvbSJ9LCJpYXQiOjE2ODM1NTQ4NjYsImV4cCI6MTY4MzU1ODQ2Nn0.AwBuLftyiBSQyLurC_o2rInxuFj7PzD2BvKAtTJrqlA",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"token\":\"63407fd1a2f2eb24f51d97b5ce3e5990\",\r\n    \"password\":\"Arka123!\",\r\n    \"confirmPassword\":\"Arka123!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/auth/resetPass",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"auth",
+								"resetPass"
+							]
+						},
+						"description": "Jangan lupa gunakan TOKEN yang didapatkan melalui email untuk melakukan reset password.  \nGunakan token pada konfigurasi headers fetch API.\n\n``` javascript\nconst headers ={\n    \"Authorizations\":`Bearer ${TOKEN}`\n}\n\n```"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "blog",
+			"item": [
+				{
+					"name": "Create Blog",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJvc2FiYTI1NzJAaHJpc2xhbmQuY29tIiwiaWQiOjEsImlhdCI6MTY4MzI1NDcwOX0.D8C42-AATmNHuEAvIHhGqgNyZk0MoXXZBhHcRAIrCrg",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "data",
+									"value": "{\n    \"title\":\"Tesla teases new Cybertruck accessory: a tool rack\",\n    \"contentBlog\":\"Tesla has teased a new Cybertruck accessory, a rugged-looking tool rack that fits on the bed of the electric pickup truck.\\r\\nWhen Tesla first unveiled the Cybertruck back in 2019, the automaker talked… [+731 chars]\",\n    \"country\":\"USA\",\n    \"category\":\"umum\",\n    \"url\":\"\",\n    \"keywords\":\"USA AI White_House Inovation\"\n}",
+									"type": "text"
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/arka_/OneDrive/Pictures/gg.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/blog",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"blog"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET BLOG",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/blog?category=umum",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"blog"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "umum"
+								},
+								{
+									"key": "search",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "perPage",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "sortBy",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "sortOrder",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "keywords",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "title",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET single Blog",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/blog/:id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"blog",
+								":id"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "perPage",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "sortBy",
+									"value": null,
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "4"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Like Blog",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImlhdCI6MTY4NzcwMTEzOSwiZXhwIjoxNjg3NzA0NzM5fQ._681jyycn69VBVrTuSuED80h1jaAW20ZxtWz_FeOWRo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRlbm94ZXQ1ODJAbGFybGFuZC5jb20iLCJpZCI6NiwiaWF0IjoxNjgzNjM1NzM0fQ.YB9THrwYjG4XWzbCo43xyOsJnNSnkurCjd7k4N9nVmI",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/blog/like/:id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"blog",
+								"like",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "6"
+								}
+							]
+						},
+						"description": "TOKEN pada headers digunakan untuk mendapatkan UserId pengguna yang menyukai blog."
+					},
+					"response": []
+				},
+				{
+					"name": "Get liked blog",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImlhdCI6MTY4NzcwMjc2MywiZXhwIjoxNjg3NzA2MzYzfQ.0kifrsB2w4OIrUxz9Jnvv8qhXD39KZZvdVs-p7WalMQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/blog/like",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"blog",
+								"like"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "perPage",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "sortBy",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET my BLOG",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiaWF0IjoxNjg3NjM1OTY0LCJleHAiOjE2ODc2Mzk1NjR9.QLJWlwdZmk9KZ-SclsiWV0IcPnZ4EvSdtotEAqwRzDc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/blog/myBlog",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"blog",
+								"myBlog"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "perPage",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "arrivederci",
+									"disabled": true
+								},
+								{
+									"key": "sortBy",
+									"value": "desc",
+									"disabled": true
+								},
+								{
+									"key": "category",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Most Favorite Blog",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRlbm94ZXQ1ODJAbGFybGFuZC5jb20iLCJpZCI6NiwiaWF0IjoxNjgzNjM1NzM0fQ.YB9THrwYjG4XWzbCo43xyOsJnNSnkurCjd7k4N9nVmI",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://minpro-blog.purwadhikabootcamp.com/api/blog/pagFav",
+							"protocol": "https",
+							"host": [
+								"minpro-blog",
+								"purwadhikabootcamp",
+								"com"
+							],
+							"path": [
+								"api",
+								"blog",
+								"pagFav"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Blog",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiaWF0IjoxNjg3NjkwNDgwLCJleHAiOjE2ODc2OTQwODB9.k69UuPHzNx1gVijzKMBvGfqqm95Nx9JKMAyY_8MCMOc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJvc2FiYTI1NzJAaHJpc2xhbmQuY29tIiwiaWQiOjEsImlhdCI6MTY4MzI1NDcwOX0.D8C42-AATmNHuEAvIHhGqgNyZk0MoXXZBhHcRAIrCrg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8000/api/blog/remove/:id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"blog",
+								"remove",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "8"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Unlike Blog",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJvc2FiYTI1NzJAaHJpc2xhbmQuY29tIiwiaWQiOjEsImlhdCI6MTY4MzI1NDcwOX0.D8C42-AATmNHuEAvIHhGqgNyZk0MoXXZBhHcRAIrCrg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8000/api/blog/like/:id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"blog",
+								"like",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "profile",
+			"item": [
+				{
+					"name": "Change Password",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiaWF0IjoxNjg3NTg5MzIxLCJleHAiOjE2ODc1OTI5MjF9.io7PY6joae_oOBHhFvqNHbfxIwLGDJ_vF8U8UVn3CuU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRlbm94ZXQ1ODJAbGFybGFuZC5jb20iLCJpZCI6NiwiaWF0IjoxNjgzNTU0MzE3fQ.zNQgtEwG60Uq4mlyMnnylkcbdikViY5rFRyENC8Uf10",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"currentPassword\":\"Arka1234!\",\r\n    \"password\":\"Arka1234!\",\r\n    \"confirmPassword\":\"Arka1234!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/profile/changePass",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"profile",
+								"changePass"
+							]
+						},
+						"description": "Jangan lupa gunakan TOKEN yang didapatkan setelah login untuk melakukan update password.  \nGunakan token pada konfigurasi headers fetch API.\n\n``` javascript\nconst headers ={\n    \"Authorizations\":`Bearer ${TOKEN}`\n}\n\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "Change Email",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJhd2FwNTIzMDVAbW9tb3NoZS5jb20iLCJpZCI6MSwiaXNWZXJpZmllZCI6MSwiaWF0IjoxNjgxODAyMjM5fQ.tQS7R6ATMMiZutLy37kFsx-AEXgHbZ4OMxJry-RV7As",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"newEmail\":\"bosaba2572@hrisland.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/profile/changeEmail",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"profile",
+								"changeEmail"
+							]
+						},
+						"description": "Jangan lupa gunakan TOKEN yang didapatkan dari email yang dikirim API untuk melakukan update email.  \nGunakan token pada konfigurasi headers fetch API.\n\n``` javascript\nconst headers ={\n    \"Authorizations\":`Bearer ${TOKEN}`\n}\n\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "Change Username",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiaWF0IjoxNjg3NTg5MzIxLCJleHAiOjE2ODc1OTI5MjF9.io7PY6joae_oOBHhFvqNHbfxIwLGDJ_vF8U8UVn3CuU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRlbm94ZXQ1ODJAbGFybGFuZC5jb20iLCJpZCI6NiwiaWF0IjoxNjgzNTU0MzE3fQ.zNQgtEwG60Uq4mlyMnnylkcbdikViY5rFRyENC8Uf10",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"denoxet58\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/profile/changeUsername",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"profile",
+								"changeUsername"
+							]
+						},
+						"description": "Jangan lupa gunakan TOKEN yang didapatkan setelah login untuk melakukan update username.  \nGunakan token pada konfigurasi headers fetch API.\n\n``` javascript\nconst headers ={\n    \"Authorizations\":`Bearer ${TOKEN}`\n}\n\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "Change Phone",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJhd2FwNTIzMDVAbW9tb3NoZS5jb20iLCJpZCI6MSwiaXNWZXJpZmllZCI6MSwiaWF0IjoxNjgxODAyMjM5fQ.tQS7R6ATMMiZutLy37kFsx-AEXgHbZ4OMxJry-RV7As",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"phone\":\"0855656456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/profile/changePhone",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"profile",
+								"changePhone"
+							]
+						},
+						"description": "Jangan lupa gunakan TOKEN yang didapatkan setelah login untuk melakukan update phone.  \nGunakan token pada konfigurasi headers fetch API.\n\n``` javascript\nconst headers ={\n    \"Authorizations\":`Bearer ${TOKEN}`\n}\n\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "Change Photo Profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiaWF0IjoxNjg3NjAxMzA3LCJleHAiOjE2ODc2MDQ5MDd9.UkOXtURJ0zg0Ebxg4TXlFVVAZz__zuz9iqwLIOy_iGc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRlbm94ZXQ1ODJAbGFybGFuZC5jb20iLCJpZCI6NiwiaWF0IjoxNjgzNTgwNDQ2fQ.GHtI5i0g-l51Mms5OGhKnv3WpE3p9TGyZf7lFK2GtkY",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/arka_/OneDrive/Pictures/gg2.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/profile/profilePhoto",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"profile",
+								"profilePhoto"
+							]
+						},
+						"description": "Jangan lupa gunakan TOKEN yang didapatkan setelah login untuk melakukan update photo profile.  \nGunakan token pada konfigurasi headers fetch API.\n\n``` javascript\nconst headers ={\n    \"Authorizations\":`Bearer ${TOKEN}`\n}\n\n```"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
